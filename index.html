@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Chattr (Chat app)</title>
+
+</head>
+<body>
+    <!-- A list for messages -->
+
+    <div class="container">
+        <div class="inbox"></div>
+        <div class="inbox__people">
+            <h4>Active</h4>
+        </div>
+        <div class="inbox__messages">
+            <div class="messages__history"></div>
+            <div class="fallback"></div>
+        </div>
+        <!-- <ul id="messages">
+
+
+        </ul> -->
+    <!-- <input type="text" size="28" id="message">
+    <input type="button" onclick="send()" value="send"> -->
+    <!-- <div class="message-container">
+        <ul id="messages"></ul>
+    </div> -->
+    
+    <form  class="message_form" id="form" action="">
+    <input type="text" class="input" autocomplete="off">
+    <button type="submit" id="send">Send</button>
+</form>
+</div>
+   
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+<!-- <script>
+  var socket = io();
+
+  var messages = document.getElementById('messages')
+// Address the form element, and set a variable to manipulate it
+var form = document.getElementById('form')
+
+// Address the input, and set a variable to manipulate it
+var input = document.getElementById('input')
+
+
+form.addEventListener('submit', function (e) {
+    // Stops the input button from inputting immediately on page load 
+    e.preventDefault();
+    // Get the user input and consider it a message.
+    if (input.value) {
+        socket.emit('chat message', input.value)
+        //  clear out the input after each submit fires.
+        input.value = ""
+    }
+})
+
+// Creates an li element that holds the new message on the page.
+socket.on('chat message', function (msg) {
+    var item = document.createElement('li');
+    item.textContent = msg;
+    li.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+
+});
+</script> -->
+    <!-- A container for the messages to display in-->
+    <!-- <div id="message-container"></div> -->
+    <!-- The form that receives input and a button to send messages.  -->
+    <!-- <form id="send-message"></form> -->
+    <!-- An input field to take in the user's input.  -->
+    <!-- <input type="text" id="message-input"> -->
+    <!-- <button type="submit" id="send-message">Send</button> -->
+</body>
+</html>
