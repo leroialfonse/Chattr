@@ -15,7 +15,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io")
 
 // Setting up socket.
-const io = new Server(server)
+const io = require("socket.io")(server)
 
 
 
@@ -32,20 +32,21 @@ app.get('/', (req, res) => {
 // On init of a socket, notify the connetion in the console.
 io.on('connection', function (socket) {
     console.log('A user connected!')
-    // A notification of a user disconnect.
-    // socket.once('disconnect', () => {
-    //     console.log('...a user disconnected.')
-    // })
 
-    io.on('connection', function (socket) {
-        socket.on('chat message', (msg) => {
-            // console log the message 
-            console.log('chat message: ' + msg)
-            //... and send the message to everyone connected.
-            // io.emit('chat message', msg)
-            // Or, send it to everyone except an emitting socket with socket.broadcast.emit
-            socket.broadcast.emit('chat message', msg)
-        })
+
+    // io.on('connection', (socket) => {
+    socket.on('chat message', (msg) => {
+        // console log the message 
+        console.log('chat message: ' + msg)
+        //... and send the message to everyone connected.
+        io.emit('chat message', msg)
+        // Or, send it to everyone except an emitting socket with socket.broadcast.emit
+        // socket.broadcast.emit('chat message', msg)
+    })
+
+    // A notification of a user disconnect.
+    socket.on('disconnect', () => {
+        console.log('...a user disconnected.')
     })
 });
 
