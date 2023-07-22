@@ -40,8 +40,7 @@ io.on('connection', function (socket) {
         console.log('chat message: ' + msg)
         //... and send the message to everyone connected.
         io.emit('chat message', msg)
-        // Or, send it to everyone except an emitting socket with socket.broadcast.emit
-        // socket.broadcast.emit('chat message', msg)
+        // Consider changing so that sender does not see the message. Don't think that's very useful, though. 
     })
 
     // A notification of a user disconnect.
