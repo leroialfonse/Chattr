@@ -1,87 +1,56 @@
 // Go get express and use 'app' to handle functions...
-const express = require('express');
-// const app = express()
-const socket = require("socekt.io")
+const express = require("express");
+const app = express()
 
-// Use http protocols.
+// Define the port.
+const PORT = 3000
+
+// Use http for express to work with server.
 const http = require('http')
 
 // Set up the server to use http.
-// const server = http.createServer(app);
+const server = http.createServer(app);
 
-// Give the server socket.io.
+// Give the server access to socket.io.
 const { Server } = require("socket.io")
 
-// const io = new Server(server)
+// Setting up socket.
+const io = new Server(server)
 
 
+
+
+// For the static files.
+app.use(express.static(__dirname + '/public'))
 
 // Get the index page...
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
 })
 
-// Active users notification
-const activeUsers = new Set();
 
-// Trigger  init of a socket, notify the connetion in the console.
-io.on('connection', (socket) => {
-    console.log('Now connected!')
-
-    // Notify when a new user joins
-    socket.on("New User", (msg) => {
-        socket.userId = msg
-        activeUsers.add(msg)
-        io.emit("New user", [...activeUsers])
-    })
-
-    // Also notify in the console about disconnects.
-    socket.on('disconnect', () => {
-        activeUsers.delete(socket.userId);
-        console.log("A user has disconnected.")
-
-    })
-
-    // original chat message data....
-    // socket.on('chat message', (msg) => {
-    //     console.log('message :' + msg);
-    //     io.emit('message :' + msg)
-
+// On init of a socket, notify the connetion in the console.
+io.on('connection', function (socket) {
+    console.log('A user connected!')
+    // A notification of a user disconnect.
+    // socket.once('disconnect', () => {
+    //     console.log('...a user disconnected.')
     // })
 
-
-    socket.on('chat message', function (msg) {
-        console.log('message :' + msg);
-        io.emit('message :' + msg)
-
-    })
-
-
-    socket.on('typing', function (data) {
-        socket.broadcast.emit('typing...', data)
+    io.on('connection', function (socket) {
+        socket.on('chat message', (msg) => {
+            // console log the message 
+            console.log('chat message: ' + msg)
+            //... and send the message to everyone connected.
+            // io.emit('chat message', msg)
+            // Or, send it to everyone except an emitting socket with socket.broadcast.emit
+            socket.broadcast.emit('chat message', msg)
+        })
     })
 });
 
-// tells a socket what a message is and how to display it
-// io.on('connection', (socket) => {
-// socket.on('chat message', (msg) => {
-//     console.log('message :' + msg);
-//     socket.emit(msg)
-
-// })
-// })
-
-// sends 'hi' to all users
-
-// io.on('connection', (socket) => {
-//     socket.broadcast.emit('hi')
-// })
-
-
-// For the css. 
-app.use(express.static(__dirname + '/public'))
 
 // Tell the server that Socekt will connect to which port to listen for requests on
-server.listen(3000, () => {
+server.listen(PORT, () => {
     console.log(`Listening on port 3000`)
 })
