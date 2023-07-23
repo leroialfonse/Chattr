@@ -6,6 +6,9 @@ var socket = io();
 var form = document.getElementById('form')
 var input = document.getElementById('input')
 
+// if there are no chats, display a greeting message.
+
+
 // An event listener to respond the teh send button being clicked to send a message.
 form.addEventListener('submit', function (e) {
     // Stops the input button from inputting immediately on page load
