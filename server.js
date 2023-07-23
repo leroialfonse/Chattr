@@ -45,7 +45,7 @@ io.on('connection', function (socket) {
     // io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         // console log the message 
-        console.log(`${users[socket.id]}: ` + msg)
+        console.log(`${name}: ` + msg)
         //... and send the message to everyone connected.
         socket.broadcast.emit('chat message', { message: msg, name: users[socket.id] })
         io.emit('chat message', msg)
