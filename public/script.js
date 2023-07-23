@@ -6,8 +6,16 @@ var socket = io();
 var form = document.getElementById('form')
 var input = document.getElementById('input')
 
-// if there are no chats, display a greeting message.
+// Ask for user name.
+// const userName = prompt('what is your name?')
+// // Attach the name to the messasger
+// appendMessage('You joined the chat!')
+// // Display that name to everyone in the chat.
+// socket.emit('Welcome, ', userName)
 
+// socket.on('chat message', data => {
+//     appendMessage(`${data.name}: ${data.message}`)
+// })
 
 // An event listener to respond the teh send button being clicked to send a message.
 form.addEventListener('submit', function (e) {
@@ -22,7 +30,7 @@ form.addEventListener('submit', function (e) {
 })
 
 // When a chat message event fires, client side captures, 
-// use socket once, to only call this listener once. Prevents multiple messages.
+// May not neeed this//// use socket once, to only call this listener once. Prevents multiple messages.
 socket.on('chat message', function (msg) {
     // ... and creates a li element in the ul that displays that message..
     console.log(msg)

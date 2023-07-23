@@ -74,12 +74,10 @@ color:var(--c5);
 
 }
 #messages > li:nth-child(odd) { 
+    justify-self:flex-end;
     background: var(--c5);
-
-    position: relative;
-    left: 0;
-    top: 0;
     color: white;
 
     
 }
+

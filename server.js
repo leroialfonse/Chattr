@@ -29,30 +29,31 @@ app.get('/', (req, res) => {
 })
 
 // Set up an object to store user information. 
-const users = {}
 
 // On init of a socket, notify the connetion in the console.
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
     // When a new user connects, they are assigned a name in that socket, which will be the id of that socket....
-    socket.on('new user', name => {
-        console.log('A user connected!')
-        // .... here. define that user's name as the socket id
-        users[socket.id] = name
-        // Tell every socket but the sending one who the user is.
-        socket.broadctast.emit('user connected', name)
-    })
+    console.log('A user connected!')
 
-    // io.on('connection', (socket) => {
+    // socket.on('new user', name => {
+    // .... here. define that user's name as the socket id
+    // users[socket.id] = name
+    // Tell every socket but the sending one who the user is.
+    // socket.emit('user connected', name)
+
+    // connect to the socket
     socket.on('chat message', (msg) => {
         // console log the message 
-        console.log(`${name}: ` + msg)
+        console.log('message :' + msg)
         //... and send the message to everyone connected.
-        socket.broadcast.emit('chat message', { message: msg, name: users[socket.id] })
         io.emit('chat message', msg)
+        // socket.on('chat message', msg)
         // Consider changing so that sender does not see the message. Don't think that's very useful, though. 
     })
+});
 
-    // A notification of a user disconnect.
+// A notification of a user disconnect.
+io.on('disconnect', (socket) => {
     socket.on('disconnect', () => {
         console.log('...a user disconnected.')
     })
