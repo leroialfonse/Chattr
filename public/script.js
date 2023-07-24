@@ -2,48 +2,62 @@
 var socket = io();
 
 // Create variables to affect the form and input client side.
-// var messages = document.getElementById('messages')
+var messages = document.getElementById('messages')
 var form = document.getElementById('form')
 var input = document.getElementById('input')
+// var handle = document.getElementById('handle')
+// var output = document.getElementById('output');
 
-// Ask for user name.
-// const userName = prompt('what is your name?')
-// // Attach the name to the messasger
-// appendMessage('You joined the chat!')
-// // Display that name to everyone in the chat.
-// socket.emit('Welcome, ', userName)
 
-// socket.on('chat message', data => {
-//     appendMessage(`${data.name}: ${data.message}`)
-// })
+// Supply the user's name.
+const userName = prompt('what is your name?')
+
+// Alert that the user has joined
+appendMessage('You joined the chat!')
+socket.emit('new user', userName)
+
+
+
+// When a chat message event fires, client side captures, 
+socket.on('chat message', (data) => {
+    // ... and creates a li element in the ul that displays that message..
+    appendMessage(`${data.userName}: ${data.message}`)
+    // and console.logs it 
+    console.log(`${data.userName}: ` + `${data.message}`)
+})
+
+// Alert the chat when a user connects, and who they are 
+socket.on('user connected', userName => {
+    appendMessage(`${userName} connected!`)
+})
+
+// And when they disconnect.
+socket.on('user disconnected', userName => {
+    appendMessage(`...${userName} disconnected.`)
+})
 
 // An event listener to respond the teh send button being clicked to send a message.
 form.addEventListener('submit', function (e) {
     // Stops the input button from inputting immediately on page load
-    e.preventDefault();
-    // Get the user input and consider it a message.
-    if (input.value) {
-        socket.emit("chat message", input.value)
-        //  clear out the input after each submit fires.
-        input.value = ''
-    }
+    e.preventDefault()
+    // Pull the message from the input
+    const message = input.value
+    // Put that value into the chat.
+    appendMessage(`You: ${message}`)
+
+    // Show that message to all connected users
+    socket.emit("send chat message",
+        message
+    )
+    //  clear out the input after each submit fires.
+
+    input.value = ''
 })
 
-// When a chat message event fires, client side captures, 
-// May not neeed this//// use socket once, to only call this listener once. Prevents multiple messages.
-socket.on('chat message', function (msg) {
-    // ... and creates a li element in the ul that displays that message..
-    console.log(msg)
-    var item = document.createElement('li')
-    // ..here
-    item.textContent = msg
-    // ... by just tacking it on to the end of the ul.
-    messages.appendChild(item);
-    // use socket.on again, to re-register the listener for the next message.
-    // socket.on('chat message', arguments.callee)
-    // scrolls the window to the latest message.
-    window.scrollTo(0, document.body.scrollHeight)
-})
-
-
+// create the message bubbles that contain messages. 
+function appendMessage(message) {
+    const messageElement = document.createElement('li')
+    messageElement.innerText = message
+    messages.append(messageElement)
+}
 

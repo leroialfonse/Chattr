@@ -21,41 +21,30 @@ const io = require("socket.io")(server)
 
 
 // For the static files.
-app.use(express.static(__dirname + '/public'))
-
-// Get the index page...
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
+app.use(express.static('public'))
 
 // Set up an object to store user information. 
+const users = {}
+
 
 // On init of a socket, notify the connetion in the console.
-io.on('connection', (socket) => {
-    // When a new user connects, they are assigned a name in that socket, which will be the id of that socket....
-    console.log('A user connected!')
-
-    // socket.on('new user', name => {
-    // .... here. define that user's name as the socket id
-    // users[socket.id] = name
-    // Tell every socket but the sending one who the user is.
-    // socket.emit('user connected', name)
-
-    // connect to the socket
-    socket.on('chat message', (msg) => {
-        // console log the message 
-        console.log('message :' + msg)
-        //... and send the message to everyone connected.
-        io.emit('chat message', msg)
-        // socket.on('chat message', msg)
-        // Consider changing so that sender does not see the message. Don't think that's very useful, though. 
+io.on('connection', socket => {
+    socket.on('new user', userName => {
+        // Notify of connection to socket and socket id as name
+        users[socket.id] = userName
+        socket.broadcast.emit('user connected', userName)
+        console.log('A user connected!', userName)
     })
-});
+    socket.on('send chat message', message => {
+        // Send everyone but the sending socket the message
+        socket.broadcast.emit('chat message', { message: message, userName: users[socket.id] })
+    })
 
-// A notification of a user disconnect.
-io.on('disconnect', (socket) => {
+    // A notification of a user disconnect.
     socket.on('disconnect', () => {
+        socket.broadcast.emit('user disconnected', users[socket.id])
         console.log('...a user disconnected.')
+        delete users[socket.id]
     })
 });
 
