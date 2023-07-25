@@ -2,11 +2,13 @@
 var socket = io();
 
 // Create variables to affect the form and input client side.
+// The chat messages
 var messages = document.getElementById('messages')
+// The input where users interract with the app...
 var form = document.getElementById('form')
+// ...and the input where they type messages.
 var input = document.getElementById('input')
-// var handle = document.getElementById('handle')
-// var output = document.getElementById('output');
+// Where the 'user is typing' message lives.
 typing = document.getElementById('typing')
 
 
@@ -25,13 +27,15 @@ socket.on('chat message', (data) => {
     appendMessage(`${data.userName}: ${data.message}`)
     // and console.logs it 
     console.log(`${data.userName}: ` + `${data.message}`)
+    // Clear the typing element when a user finishes typing.
     typing.innerHTML = ''
+    // continue scrolling the screen to keep the chat in focus. 
     window.scrollTo(0, document.body.scrollHeight);
 })
 
 // Alert when someone is typing
 socket.on('typing', function (data) {
-    // typing.innerHTML = '<p>' + data + ' is typing....</p>'
+    // Display the user typing message in the "typing " element.
     typing.innerHTML = `<p>${data} is typing...</p>`
 
 })
