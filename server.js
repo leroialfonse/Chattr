@@ -3,7 +3,7 @@ const express = require("express");
 const app = express()
 
 // Define the port.
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 // Use http for express to work with server.
 const http = require('http')
