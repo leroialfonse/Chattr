@@ -23,6 +23,10 @@ const io = require("socket.io")(server)
 // For the static files.
 app.use(express.static('public'))
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
+})
+
 // Set up an object to store user information. 
 const users = {}
 
