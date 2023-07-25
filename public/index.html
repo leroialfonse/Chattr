@@ -9,10 +9,14 @@
 </head>
 
 <body>
+  <main>
     <!-- Creates a list of messagess as they are created -->
-        <ul id="messages"></ul>
+        <ul id="messages">
+          <!-- <div id="typing"></div> -->
+
+        </ul>
         <!-- alert when someone is typing. -->
-        <div id="typing">
+        <!-- <div id="typing"> -->
 
           <!-- Considering an elipses with animation.. -->
         <!-- <div class="typingDots">
@@ -20,16 +24,18 @@
           <div class="typing__dot"></div>
           <div class="typing__dot"></div>
         </div> -->
-      </div>
+      <!-- </div> -->
 
         
         <!-- The form element that users will interact with -->
+        <div>
+          <div id="typing"></div>
         <form id="form" action="">
             <!-- The input for typing messages. -->
           <input id="input" autocomplete="off" placeholder="type your message" /><button id="send">Send</button>
         </form>
-    
-   
+        </div>
+      </main>
    
         <!-- Socket cdn. -->
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
