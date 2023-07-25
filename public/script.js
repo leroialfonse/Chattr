@@ -7,6 +7,7 @@ var form = document.getElementById('form')
 var input = document.getElementById('input')
 // var handle = document.getElementById('handle')
 // var output = document.getElementById('output');
+typing = document.getElementById('typing')
 
 
 // Supply the user's name.
@@ -24,7 +25,18 @@ socket.on('chat message', (data) => {
     appendMessage(`${data.userName}: ${data.message}`)
     // and console.logs it 
     console.log(`${data.userName}: ` + `${data.message}`)
+    typing.innerHTML = ''
+    window.scrollTo(0, document.body.scrollHeight);
 })
+
+// Alert when someone is typing
+socket.on('typing', function (data) {
+    // typing.innerHTML = '<p>' + data + ' is typing....</p>'
+    typing.innerHTML = `<p>${data} is typing...</p>`
+
+})
+
+
 
 // Alert the chat when a user connects, and who they are 
 socket.on('user connected', userName => {
@@ -33,6 +45,7 @@ socket.on('user connected', userName => {
 
 // And when they disconnect.
 socket.on('user disconnected', userName => {
+    console.log(userName)
     appendMessage(`...${userName} disconnected.`)
 })
 
@@ -50,8 +63,13 @@ form.addEventListener('submit', function (e) {
         message
     )
     //  clear out the input after each submit fires.
-
     input.value = ''
+    window.scrollTo(0, 9999)
+})
+
+// Will listen to the form for keypress, and pop the user is typing message
+form.addEventListener('keypress', function () {
+    socket.emit('typing', userName)
 })
 
 // create the message bubbles that contain messages. 
@@ -60,4 +78,3 @@ function appendMessage(message) {
     messageElement.innerText = message
     messages.append(messageElement)
 }
-

@@ -13,12 +13,22 @@
 <body>
     <!-- Creates a list of messagess as they are created -->
         <ul id="messages"></ul>
+        <!-- alert when someone is typing. -->
+        <div id="typing">
+          <!-- Considering an elipses with animation.. -->
+        <!-- <div class="typingDots">
+          <div class="typing__dot"></div>
+          <div class="typing__dot"></div>
+          <div class="typing__dot"></div>
+        </div> -->
+      </div>
+
+        
         <!-- The form element that users will interact with -->
         <form id="form" action="">
             <!-- The input for typing messages. -->
             <!-- <input id="handle" placeholder="Your Name"></input> -->
-
-          <input id="input" autocomplete="off" placeholder="type your message" /><button>Send</button>
+          <input id="input" autocomplete="off" placeholder="type your message" /><button id="send">Send</button>
         </form>
     
    

@@ -31,21 +31,29 @@ const users = {}
 io.on('connection', socket => {
     socket.on('new user', userName => {
         // Notify of connection to socket and socket id as name
-        users[socket.id] = userName
-        socket.broadcast.emit('user connected', userName)
-        console.log('A user connected!', userName)
+        users[socket.id] = userName || "User"
+        socket.broadcast.emit('user connected', users[socket.id])
+        console.log(`${userName} connected!`)
     })
     socket.on('send chat message', message => {
         // Send everyone but the sending socket the message
         socket.broadcast.emit('chat message', { message: message, userName: users[socket.id] })
     })
 
+
+
     // A notification of a user disconnect.
     socket.on('disconnect', () => {
         socket.broadcast.emit('user disconnected', users[socket.id])
-        console.log('...a user disconnected.')
+        console.log(`...${users[socket.id]} disconnected.`)
         delete users[socket.id]
     })
+
+    // Someone is typing
+    socket.on(
+        'typing', function (data) {
+            socket.broadcast.emit('typing', data)
+        })
 });
 
 
