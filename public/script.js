@@ -10,14 +10,56 @@ var form = document.getElementById('form')
 var input = document.getElementById('input')
 // Where the 'user is typing' message lives.
 typing = document.getElementById('typing')
+// Address the room conatiner.
+var roomContainer = document.getElementById('room-conatiner')
 
 
-// Supply the user's name.
-const userName = prompt('what is your name?')
 
-// Alert that the user has joined
-appendMessage('You joined the chat!')
-socket.emit('new user', userName)
+// Check to see if the user has already entered a name.
+if (form != null) {
+    // Supply the user's name.
+    const userName = prompt('what is your name?')
+
+    // Alert that the user has joined
+    appendMessage('You joined the chat!')
+    socket.emit('new user', roomName, userName)
+
+    // An event listener to respond the teh send button being clicked to send a message.
+    form.addEventListener('submit', function (e) {
+        // Stops the input button from inputting immediately on page load
+        e.preventDefault()
+        // Pull the message from the input
+        const message = input.value
+        // Put that value into the chat.
+        appendMessage(`You: ${message}`)
+
+        // Show that message to all connected users
+        socket.emit("send chat message", roomName,
+            message
+        )
+        //  clear out the input after each submit fires.
+        input.value = ''
+        window.scrollTo(0, 9999)
+    })
+
+
+}
+
+
+
+// Alert when a room is connected.
+socket.on('room created', room => {
+    // <div> <%= room %> </div>
+    // <a href="/<%= room %>">Join</a>
+    const roomElement = document.createElement('div')
+    roomElement.innerText = `Welcoe to the ${room} room!`
+    const roomLink = document.createElement('a')
+    roomLink.href = `/${room}`
+    roomLink.innerText = 'Join'
+    roomContainer.append(roomElement)
+    roomContainer.append(roomLink)
+})
+
 
 
 
@@ -44,6 +86,7 @@ socket.on('typing', function (data) {
 
 // Alert the chat when a user connects, and who they are 
 socket.on('user connected', userName => {
+    console.log(`${userName} connected!`)
     appendMessage(`${userName} connected!`)
 })
 
@@ -53,26 +96,10 @@ socket.on('user disconnected', userName => {
     appendMessage(`...${userName} disconnected.`)
 })
 
-// An event listener to respond the teh send button being clicked to send a message.
-form.addEventListener('submit', function (e) {
-    // Stops the input button from inputting immediately on page load
-    e.preventDefault()
-    // Pull the message from the input
-    const message = input.value
-    // Put that value into the chat.
-    appendMessage(`You: ${message}`)
 
-    // Show that message to all connected users
-    socket.emit("send chat message",
-        message
-    )
-    //  clear out the input after each submit fires.
-    input.value = ''
-    window.scrollTo(0, 9999)
-})
 
 // Will listen to the form for keypress, and pop the user is typing message
-form.addEventListener('keypress', function () {
+form.addEventListener('keypress', function (userName) {
     socket.emit('typing', userName)
 })
 
