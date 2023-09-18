@@ -16,15 +16,16 @@
         <a href="/<%= room %>">Join</a>
         <% }) %>
         <!-- The form will allow users to select and enter a new room. -->
-       
     </div>
+       
+    <h3>Enter a new room nanme.</h3>
     <form action="/room" method="POST">
-        <input name='room' type="text" required>
+        <input name="room" type="text" required>
         <button type="submit">New Room</button>
         </form>
 
     <!-- Socket cdn. -->
-    <!-- <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="script.js"></script> -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

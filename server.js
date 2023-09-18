@@ -2,7 +2,6 @@
 const express = require("express");
 const app = express();
 
-
 // Set up the server to use http.
 const server = require('http').Server(app)
 
@@ -10,7 +9,7 @@ const server = require('http').Server(app)
 const io = require("socket.io")(server)
 
 // Define the port.
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 4040
 
 // Use http for express to work with server.
 const http = require('http')
@@ -24,7 +23,7 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 
-// Be able to accept url params]
+// Be able to accept url params
 app.use(express.urlencoded({ extended: true }))
 
 
@@ -36,7 +35,7 @@ app.get('/', (req, res) => {
     res.render('index', { rooms: rooms })
 })
 
-// Get a route for the rooms.
+// // Get a route for the rooms.
 app.post('/room', (req, res) => {
     // Check that a room is not being assigned the same name as another room. If it is, redirect to the index.
     if (rooms[req.body.room] != null) {
@@ -44,52 +43,62 @@ app.post('/room', (req, res) => {
     }
     // Which room are we looking for?
     rooms[req.body.room] = { users: {} }
-    // Direct teh user to the new room after selection.
+    // Direct the user to the new room after selection.
     res.redirect(req.body.room)
     // Send a message that a room was created...
-    // ///////////////////////////////////
 
-    io.emit('room created.', req.body.room)
-
-
-    // ///////////////
+    io.emit('New room created!', req.body.room)
 })
 
 
 
 
-// Get a differnt room
+// Get a differnt room, with 'room' as a param. SO, a user can select a room to go into.
 app.get('/:room', (req, res) => {
     // redirect a user back to home if a room name supplied doesn't exist.
     if (rooms[req.params.room] == null) {
-        res.redirect('/')
+        return res.redirect('/')
     }
-
-
-
 
     res.render('room', { roomName: req.params.room })
 })
 
 // Set up an object to store user information. 
 // Won't need this object once I have rooms set up, because I only want to use it inside of rooms.
-// const users = {}
+const users = {}
 
 
 // On init of a socket, notify the connetion in the console.
 io.on('connection', socket => {
-    socket.on('new user', (userName, room) => {
-        // Sends users to the specific room.
+
+
+    socket.on('new user', (room, userName) => {
         socket.join(room)
+
+        // Sends users to the specific room.
         // Notify of connection to socket and socket id as name
         rooms[room].users[socket.id] = userName || "User"
-        socket.to(room).broadcast.emit('user connected', users[socket.id])
+        socket.to(`${room}`).emit('user connected', users[socket.id])
         console.log(`${userName} connected!`)
     })
-    socket.on('send chat message', (message, room) => {
-        // Send everyone but the sending socket the message, ut only to users in this current room.
-        socket.to(room).broadcast.emit('chat message', { message: message, userName: rooms[room].users[socket.id] })
-    })
+
+
+    // Original.
+    // socket.on('send chat message', (room, message) => {
+    //     // Send everyone but the sending socket the message, ut only to users in this current room.
+    //     socket.to(room).emit('chat message', { message: message, userName: rooms[room].users[socket.id] })
+    // })
+
+    // Trying
+
+    socket.on('send chat message', (room, message) => {
+        if (rooms[room] && rooms[room].users && rooms[room].users[socket.id]) {
+            socket.to(room).emit('chat message', { message: message, userName: rooms[room].users[socket.id] });
+        } else {
+            // Handle the case where the room or user is not found.
+            console.error('Error: Room or user not found.');
+        }
+    });
 
 
 
@@ -107,7 +116,7 @@ io.on('connection', socket => {
 
     // Someone is typing
     socket.on(
-        'typing', function (data) {
+        'typing', function (data, userName) {
             socket.broadcast.emit('typing', data)
         })
 });
@@ -119,6 +128,6 @@ function getUserRooms(socket) {
     }, [])
 }
 // Tell the server that Socekt will connect to which port to listen for requests on
-server.listen(3000, () => {
-    console.log(`Listening on port 3000`)
+server.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)
 })
