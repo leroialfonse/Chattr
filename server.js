@@ -72,28 +72,28 @@ const users = {}
 io.on('connection', socket => {
 
 
-    socket.on('new user', (room, userName) => {
+    socket.on('new user', (room, name) => {
         socket.join(room)
 
         // Sends users to the specific room.
         // Notify of connection to socket and socket id as name
-        rooms[room].users[socket.id] = userName || "User"
+        rooms[room].users[socket.id] = name || "User"
         socket.to(`${room}`).emit('user connected', users[socket.id])
-        console.log(`${userName} connected!`)
+        console.log(`${name} connected!`)
     })
 
 
     // Original.
     // socket.on('send chat message', (room, message) => {
     //     // Send everyone but the sending socket the message, ut only to users in this current room.
-    //     socket.to(room).emit('chat message', { message: message, userName: rooms[room].users[socket.id] })
+    //     socket.to(room).emit('chat message', { message: message, name: rooms[room].users[socket.id] })
     // })
 
     // Trying
 
     socket.on('send chat message', (room, message) => {
         if (rooms[room] && rooms[room].users && rooms[room].users[socket.id]) {
-            socket.to(room).emit('chat message', { message: message, userName: rooms[room].users[socket.id] });
+            socket.to(room).emit('chat message', { message: message, name: rooms[room].users[socket.id] });
         } else {
             // Handle the case where the room or user is not found.
             console.error('Error: Room or user not found.');
@@ -116,7 +116,7 @@ io.on('connection', socket => {
 
     // Someone is typing
     socket.on(
-        'typing', function (data, userName) {
+        'typing', function (data, name) {
             socket.broadcast.emit('typing', data)
         })
 });
