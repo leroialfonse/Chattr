@@ -65,7 +65,7 @@ app.get('/:room', (req, res) => {
 
 // Set up an object to store user information. 
 // Won't need this object once I have rooms set up, because I only want to use it inside of rooms.
-const users = {}
+// const users = {}
 
 
 // On init of a socket, notify the connetion in the console.
@@ -84,21 +84,21 @@ io.on('connection', socket => {
 
 
     // Original.
-    // socket.on('send chat message', (room, message) => {
-    //     // Send everyone but the sending socket the message, ut only to users in this current room.
-    //     socket.to(room).emit('chat message', { message: message, name: rooms[room].users[socket.id] })
-    // })
+    socket.on('send chat message', (room, message) => {
+        // Send everyone but the sending socket the message, ut only to users in this current room.
+        socket.to(room).emit('chat message', { message: message, name: rooms[room].users[socket.id] })
+    })
 
     // Trying
 
-    socket.on('send chat message', (room, message) => {
-        if (rooms[room] && rooms[room].users && rooms[room].users[socket.id]) {
-            socket.to(room).emit('chat message', { message: message, name: rooms[room].users[socket.id] });
-        } else {
-            // Handle the case where the room or user is not found.
-            console.error('Error: Room or user not found.');
-        }
-    });
+    // socket.on('send chat message', (room, message) => {
+    //     if (rooms[room] && rooms[room].users && rooms[room].users[socket.id]) {
+    //         socket.to(room).emit('chat message', { message: message, name: rooms[room].users[socket.id] });
+    //     } else {
+    //         // Handle the case where the room or user is not found.
+    //         console.error('Error: Room or user not found.');
+    //     }
+    // });
 
 
 

@@ -6,41 +6,46 @@
     <link rel="stylesheet" href="style.css">
     <title>Chattr (Chat app)</title>
 <!-- Define rooms, so that roomname can appear on the page. -->
-<script> const roomName = "<%= roomName %>"</script>
+
+
+<script>
+  const roomName = "<%= roomName %>" 
+  </script>
+
+  <script defer src="http://localhost:4040/socket.io/socket.io.js"></script>
+  <script defer src="script.js"></script>
 </head>
 
 <body>
-  <main>
+ <main>
     <!-- Creates a list of messagess as they are created -->
         <ul id="messages">
            <div id="typing"></div>
 
         </ul>
         <!-- alert when someone is typing. -->
-        <!-- <div id="typing"> -->
+       <div id="typing">
 
-          <!-- Considering an elipses with animation.. -->
-        <!-- <div class="typingDots">
+          <!-- Considering an elipses with animation...
+         <div class="typingDots">
           <div class="typing__dot"></div>
           <div class="typing__dot"></div>
           <div class="typing__dot"></div>
-        </div> -->
-      <!-- </div> -->
+        </div> 
+      </div> -->
 
         
         <!-- The form element that users will interact with -->
         <div>
-          <div id="typing"></div>
+           <div id="typing"></div>
         <form id="form" action="">
             <!-- The input for typing messages. -->
-          <input id="input" autocomplete="off" placeholder="type your message" /><button id="send">Send</button>
-        </form>
+          <input id="input" type="text" autocomplete="off" placeholder="type your message" /><button type="submit" id="send">Send</button>
+        </form> 
         </div>
-      </main>
+ </main>
    
-        <!-- Socket cdn. -->
-        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-<script src="script.js"></script>
+
 
 </body>
 </html>
