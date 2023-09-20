@@ -3,31 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Chattr (Chat app)</title>
+    <!-- <link rel="stylesheet" href="/public/style.css"> -->
+    <title>Chattr (Chat App)</title>
 
-    <script defer src="http://localhost:4040/socket.io/socket.io.js"></script>
-  <script defer src="script.js"></script>
+     <script defer src="http://localhost:8500/socket.io/socket.io.js"></script>
+   <script defer src="/public/script.js"></script>
+   </head>
 
-</head>
-<body>
-
-    <!-- List all the rooms in the chat server. -->
+   <body>
     <div id="room-container">
-        <% Object.keys(rooms).forEach(room => { %> 
-        <div> <%= room %> </div>
-        <a href="/<%= room %>">Join</a>
+    <% Object.keys(rooms).forEach(room => {
+        %> <div><%= room %></div>
+        <a href="/<%= room %>">Join This Room</a>
         <% }) %>
-        <!-- The form will allow users to select and enter a new room. -->
        
-    <h3>Enter a new room nanme.</h3>
+    
+    </div>
+
     <form action="/room" method="POST">
         <input name="room" type="text" required>
-        <button type="submit">New Room</button>
-        </form>
-
-    <!-- Socket cdn. May omit for the defer scripts-->
-    <!-- <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="script.js"></script> -->
-</body>
-</html>
+        <button type="submit">New room</button> 
+    </form>
+   </body>
+   </html>

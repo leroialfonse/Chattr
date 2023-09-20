@@ -76,10 +76,10 @@ width: fit-content;
 color:var(--c5);
 
 }
-#messages > li:nth-child(odd) { 
+/* #messages > li:nth-child(odd) { 
     background: var(--c5);
     color: white;
-}
+} */
 
 #typing{
     padding: 0rem 2rem;

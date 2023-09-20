@@ -3,49 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Chattr (Chat app)</title>
-<!-- Define rooms, so that roomname can appear on the page. -->
-
-
+    <!-- <link rel="stylesheet" href="/public/style.css"> -->
+    <title>Chattr (Chat App)</title>
 <script>
-  const roomName = "<%= roomName %>" 
-  </script>
-
-  <script defer src="http://localhost:4040/socket.io/socket.io.js"></script>
-  <script defer src="script.js"></script>
+    const roomName = "<%= roomName %>"
+</script>
+     <script defer src="http://localhost:8500/socket.io/socket.io.js"></script>
+   <script defer src="script.js"></script>
 </head>
-
 <body>
- <main>
-    <!-- Creates a list of messagess as they are created -->
-        <ul id="messages">
-           <div id="typing"></div>
-
-        </ul>
-        <!-- alert when someone is typing. -->
-       <div id="typing">
-
-          <!-- Considering an elipses with animation...
-         <div class="typingDots">
-          <div class="typing__dot"></div>
-          <div class="typing__dot"></div>
-          <div class="typing__dot"></div>
-        </div> 
-      </div> -->
-
-        
-        <!-- The form element that users will interact with -->
-        <div>
-           <div id="typing"></div>
-        <form id="form" action="">
-            <!-- The input for typing messages. -->
-          <input id="input" type="text" autocomplete="off" placeholder="type your message" /><button type="submit" id="send">Send</button>
-        </form> 
-        </div>
- </main>
-   
-
-
+    <div id="message-container">
+        <form id="send-container" action="">
+            <input type="text" id="message-input">
+            <button type="submit" id="send-button">Send</button>
+        </form>
+    </div>
 </body>
 </html>
